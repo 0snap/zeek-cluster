@@ -22,6 +22,16 @@ I intend to use this setup on an offline demo environment. I do not have to be c
 
 Images ship with `supervisord` (nodaemon). It wraps the `sshd` and `bro` processes. Images build against latest bro master.
 
+Pre-built images can be found on dockerhub: https://hub.docker.com/r/fixel/bro-cluster/tags/  (I had to abuse tags to get in the same repo)
+
 ### Network
 
-See the [docker-compose.yml](docker-compose.yml) and [manager/config/node.cfg](manager/config/node.cfg) file. All nodes in the bro cluster must be resolvable for the manager (IP or hostname). 
+See the [docker-compose.yml](docker-compose.yml) and [manager/config/node.cfg](manager/config/node.cfg) file. All nodes in the bro cluster must be resolvable for the manager (IP or hostname).
+
+### Compose
+
+Run a minimalistic local cluster of `2 workers`, `1 proxy`  and `1 master` (without dedicated `logger`)
+
+    $ docker-compose up
+
+Toy around with it, for example `docker inspect bro-cluster_worker1_1`, find the IP and request some port there (locally!). When you now exec into the `manager` container you should see your request to the worker in the manager logs (`current/conn.log`)

@@ -78,6 +78,7 @@ RUN mkdir /run/sshd && \
     chmod 0600 /root/.ssh/config && \
     chmod 0600 /root/.ssh/id_rsa
 
-#CMD /bin/bash -l
-#ENTRYPOINT ["bro", "-Q", "-C", "-i", "eth0", "/bro/scripts/"]
+# broker listen on port 9999
+EXPOSE 9999
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

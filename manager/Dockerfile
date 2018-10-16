@@ -1,6 +1,4 @@
-FROM fixel/bro-ssh-node
-
-EXPOSE 9999
+FROM fixel/bro-cluster:bro-ssh-node
 
 COPY config/node.cfg /bro/etc/node.cfg
 COPY config/networks.cfg /bro/etc/networks.cfg

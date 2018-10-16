@@ -36,3 +36,9 @@ Run a minimalistic local cluster of `2 workers`, `1 proxy`  and `1 master` (with
     $ docker-compose down           # (in same directory) tear down cluster, throw away containers
 
 Toy around with it, for example `docker inspect bro-cluster_worker1_1`, find the IP and request some port there (locally!). When you now exec into the `manager` container you should see your request to the worker in the manager logs (`current/conn.log`)
+
+### Custom Scripts
+
+[Bro can be scripted](https://www.bro.org/sphinx/scripting/index.html). Per default, it will load the script at `$BRO_HOME/share/bro/site/local.bro`. See also the [broctl#bro-scripts](https://www.bro.org/sphinx/components/broctl/README.html#bro-scripts) documentation.
+
+To add custom scripts just mount a volume into the manager container. See the [docker-compose.yml](docker-compose.yml) for an example. The manager will populate the scripts to all workers.

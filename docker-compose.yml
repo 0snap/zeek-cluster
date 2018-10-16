@@ -38,6 +38,8 @@ services:
       - worker1
       - worker2
       - proxy
+    # volumes:
+    #  - "./path/to/your/scripts:/bro/share/bro/site"
     networks:
       bro-cluster-overlay:
         aliases:

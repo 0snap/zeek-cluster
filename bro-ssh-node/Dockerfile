@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y \
     librocksdb-dev \
     libjemalloc-dev \
     libmaxminddb-dev \
+    python-pip \
     --no-install-recommends
 
 # get latest bro from source
@@ -38,6 +39,27 @@ RUN tar xvzf GeoLite2-ASN.tar.gz
 RUN rm GeoLite2-City.tar.gz
 RUN rm GeoLite2-ASN.tar.gz
 
+ENV PATH=/usr/local/bro/bin:$PATH
+
+RUN pip install setuptools wheel
+
+RUN pip install bro-pkg && \
+    bro-pkg autoconfig
+
+RUN bro-pkg install --force --skiptests \
+    corelight/bro-quic \
+    corelight/conn-burst \
+    corelight/http-stalling-detector \
+    corelight/log-add-http-post-bodies \
+    dopheide/venom \
+    hhzzk/dns-tunnels \
+    hosom/file-extraction \
+    initconf/CVE-2017-5638_struts \
+    initconf/scan-NG \
+    initconf/smtp-url-analysis \
+    initconf/vnc-scanner \
+    sethhall/credit-card-exposure \
+    srozb/dns_axfr
 
 # "production" image will hold supervisor -> bro and ssh
 FROM debian:stretch

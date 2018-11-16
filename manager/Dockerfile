@@ -2,8 +2,8 @@ FROM fixel/bro-cluster:bro-ssh-node
 
 COPY config/node.cfg /bro/etc/node.cfg
 COPY config/networks.cfg /bro/etc/networks.cfg
-COPY config/init_cluster_broctl.sh /bro/bin/init_cluster_broctl.sh
-RUN chmod a+x /bro/bin/init_cluster_broctl.sh
+COPY config/init_cluster_broctl.sh /bro/etc/cluster_config/start-command.sh
+RUN chmod a+x /bro/etc/cluster_config/start-command.sh
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

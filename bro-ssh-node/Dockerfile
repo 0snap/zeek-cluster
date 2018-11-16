@@ -1,81 +1,21 @@
-FROM debian:stretch as install
-
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
-    bison \
-    flex \
-    gawk \
-    cmake \
-    swig \
-    libssl1.0-dev \
-    libgeoip-dev \
-    libpcap-dev \
-    python-dev \
-    libcurl4-openssl-dev \
-    wget \
-    libncurses5-dev \
-    ca-certificates \
-    zlib1g-dev \
-    librocksdb-dev \
-    libjemalloc-dev \
-    libmaxminddb-dev \
-    python-pip \
-    --no-install-recommends
-
-# get latest bro from source
-WORKDIR /opt
-RUN git clone --recursive https://github.com/bro/bro /opt/bro-git
-WORKDIR /opt/bro-git
-
-RUN ./configure --with-jemalloc=/usr/lib/x86_64-linux-gnu
-RUN make -j8 install
-
-WORKDIR /usr/share/GeoIP
-RUN wget -N http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
-RUN wget -N http://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN.tar.gz
-RUN tar xvzf GeoLite2-City.tar.gz
-RUN tar xvzf GeoLite2-ASN.tar.gz
-RUN rm GeoLite2-City.tar.gz
-RUN rm GeoLite2-ASN.tar.gz
-
-ENV PATH=/usr/local/bro/bin:$PATH
-
-RUN pip install setuptools wheel
-
-RUN pip install bro-pkg && \
-    bro-pkg autoconfig
-
-RUN bro-pkg install --force --skiptests \
-    corelight/bro-quic \
-    corelight/conn-burst \
-    corelight/http-stalling-detector \
-    corelight/log-add-http-post-bodies \
-    dopheide/venom \
-    hhzzk/dns-tunnels \
-    hosom/file-extraction \
-    initconf/CVE-2017-5638_struts \
-    initconf/scan-NG \
-    initconf/smtp-url-analysis \
-    initconf/vnc-scanner \
-    sethhall/credit-card-exposure \
-    srozb/dns_axfr
+FROM fixel/bro-cluster:base as install
 
 # "production" image will hold supervisor -> bro and ssh
 FROM debian:stretch
 
 RUN apt-get update && apt-get -y install \
-    libpcap0.8 \
-    libssl1.0.2 \
-    libmaxminddb0 \
-    python2.7-minimal \
-    librocksdb4.5 \
-    libjemalloc1 \
     curl \
-    openssh-server \
-    supervisor \
-    rsync \
+    git \
+    libjemalloc1 \
+    libmaxminddb0 \
+    libpcap0.8 \
+    librocksdb4.5 \
+    libssl1.0.2 \
     net-tools \
+    openssh-server \
+    python2.7-minimal \
+    rsync \
+    supervisor \
     --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*

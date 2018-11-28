@@ -1,0 +1,48 @@
+version: '3'
+
+networks:
+  bro-cluster-overlay:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+  worker1:
+    # build: bro-ssh-node
+    image: fixel/bro-cluster:bro-ssh-node
+    networks:
+      bro-cluster-overlay:
+        aliases:
+          - worker1
+  
+  worker2:
+    # build: bro-ssh-node
+    image: fixel/bro-cluster:bro-ssh-node
+    networks:
+      bro-cluster-overlay:
+        aliases:
+          - worker2
+
+  proxy:
+    # build: bro-ssh-node
+    image: fixel/bro-cluster:bro-ssh-node
+    networks:
+      bro-cluster-overlay:
+        aliases:
+          - proxy
+
+  manager:
+    # build: manager
+    image: fixel/bro-cluster:manager
+    depends_on:
+      - worker1
+      - worker2
+      - proxy
+    # volumes:
+    #  - "./path/to/your/scripts:/bro/share/bro/site"
+    networks:
+      bro-cluster-overlay:
+        aliases:
+          - manager
+
+    

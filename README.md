@@ -4,6 +4,8 @@
 
 [Official Bro IDS cluster documentation](https://www.bro.org/sphinx/cluster/index.html)
 
+This repo provides a docker wrapper around Bro that allows for a containerized Bro IDS cluster.
+
 ## Internals and setup
 
 Bro uses ssh to manage the nodes. The manager node needs to ssh into all slave nodes it wants to manage. Therefore:
@@ -22,7 +24,11 @@ I intend to use this setup on an offline demo environment. I do not have to be c
 
 Images ship with `supervisord` (nodaemon). It wraps the `sshd` and `bro` processes. Images build against latest bro master.
 
-Pre-built images can be found on dockerhub: https://hub.docker.com/r/fixel/bro-cluster/tags/  (I had to abuse tags to get in the same repo)
+Pre-built images (`x86_64` and `arm64v8`) can be found on dockerhub: https://hub.docker.com/r/fixel/bro-cluster/tags/  (I had to abuse tags to get in the same repo)
+
+#### ARM 64v8
+
+I provide images for 64bit ARM. The dockerfiles inherit from the debian `arm64v8` base image. The images you find on dockerhub were compiled on a 64bit ARM-v8 chipset, architecture `aarch64` (nVidia Jetson TX2). They are runnable on this platform and should work on any ARM based chipset with 64bit.
 
 ### Network
 

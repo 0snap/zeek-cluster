@@ -24,13 +24,13 @@ I intend to use this setup on an offline demo environment. I do not have to be c
 
 ## Docker
 
-Images ship with `supervisord` (nodaemon). It wraps the `sshd` and `zeek` processes. Images build against latest Zeek master.
+Images ship with `supervisord` (nodaemon). It wraps the `sshd` and `bro` processes. Images build against latest Zeek master.
 
-Pre-built images (`x86_64` and `arm64v8`) can be found on dockerhub: https://hub.docker.com/r/fixel/bro-cluster/tags/  (I had to abuse tags to get in the same repo)
+Pre-built images for `x86_64` can be found on [dockerhub](https://cloud.docker.com/u/fixel/repository/docker/fixel/zeek-cluster)
 
 #### ARM 64v8
 
-I provide images for 64bit ARM. The dockerfiles inherit from the debian `arm64v8` base image. The images you find on dockerhub were compiled on a 64bit ARM-v8 chipset, architecture `aarch64` (nVidia Jetson TX2). They are runnable on this platform and should work on any ARM based chipset with 64bit.
+I plan on rebuilding and providing images for 64bit ARM again. The dockerfiles inherit from the debian `arm64v8` base image. I need to get the appropiate hardware back first. The images will be uploaded the next weeks.
 
 ### Network
 

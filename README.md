@@ -6,6 +6,8 @@
 
 This repo provides a docker wrapper around Zeek that allows for a containerized Zeek IDS cluster.
 
+The base image is a raw Zeek IDS installation with `python3`, `librocksdb` for broker support and geo data available inside the container: [fixel/zeek](https://cloud.docker.com/repository/docker/fixel/zeek) 
+
 ## Internals and setup
 
 Zeek uses ssh to manage the nodes. The manager node needs to ssh into all slave nodes it wants to manage. Therefore:
@@ -45,6 +47,6 @@ Toy around with it, for example `docker inspect zeek-cluster_worker1_1`, find th
 
 ### Custom Scripts
 
-[Zeek can be scripted](https://docs.zeek.org/en/stable/examples/scripting/index.html). Per default, it will load the script at `$ZEEK_HOME/share/zeek/site/local.bro`. See also the [broctl#bro-scripts](https://github.com/zeek/broctl#bro-scripts) documentation.
+[Zeek can be scripted](https://docs.zeek.org/en/stable/examples/scripting/index.html). Per default, it will load the script at `$ZEEK_HOME/share/bro/site/local.bro`. See also the [broctl#bro-scripts](https://github.com/zeek/broctl#bro-scripts) documentation.
 
 To add custom scripts just mount a volume into the manager container. See the [docker-compose.yml](docker-compose.yml) for an example. The manager will populate the scripts to all workers.

@@ -1,35 +1,35 @@
 FROM debian:stretch
 
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    git \
     bison \
+    build-essential \
+    ca-certificates \
+    cmake \
     flex \
     gawk \
-    cmake \
-    swig \
-    libssl1.0-dev \
-    libgeoip-dev \
-    libpcap-dev \
-    python-dev \
+    git \
     libcurl4-openssl-dev \
-    wget \
-    libncurses5-dev \
-    ca-certificates \
-    zlib1g-dev \
-    librocksdb-dev \
+    libgeoip-dev \
     libjemalloc-dev \
     libmaxminddb-dev \
-    python-pip \
+    libncurses5-dev \
+    libpcap-dev \
+    librocksdb-dev \
+    libssl1.0-dev \
+    python3-dev \
+    python3-pip \
+    swig \
+    wget \
+    zlib1g-dev \
     --no-install-recommends
 
-# get latest bro from source
+# get latest zeek from source
 WORKDIR /opt
-RUN git clone --recursive https://github.com/bro/bro /opt/bro-git
-WORKDIR /opt/bro-git
+RUN git clone --recursive https://github.com/zeek/zeek /opt/zeek-git
+WORKDIR /opt/zeek-git
 
 RUN ./configure --with-jemalloc=/usr/lib/x86_64-linux-gnu
-RUN make -j8 install
+RUN make -j4 install
 
 WORKDIR /usr/share/GeoIP
 RUN wget -N http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
@@ -41,14 +41,20 @@ RUN rm GeoLite2-ASN.tar.gz
 
 ENV PATH=/usr/local/bro/bin:$PATH
 
-RUN pip install setuptools wheel
+VOLUME /usr/local/bro/logs
 
-RUN pip install bro-pkg && \
+RUN pip3 install setuptools wheel
+
+RUN pip3 install bro-pkg && \
     bro-pkg autoconfig
 
-COPY bro-pkg.conf /root/.bro-pkg/config
-COPY bro-pkg.conf /usr/local/bro/bro-pkg/config
+COPY zeek-pkg.conf /root/.bro-pkg/config
+COPY zeek-pkg.conf /usr/local/bro/bro-pkg/config
 
 EXPOSE 9999
 
-CMD /bin/bash -l
+WORKDIR /opt/zeek
+COPY entrypoint.sh entrypoint.sh
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]

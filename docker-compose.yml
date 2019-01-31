@@ -1,47 +1,47 @@
 version: '3'
 
 networks:
-  bro-cluster-overlay:
+  zeek-cluster-overlay:
     ipam:
       config:
         - subnet: 172.20.0.0/24
 
 services:
   worker1:
-    # build: bro-ssh-node
-    image: fixel/bro-cluster:bro-ssh-node
+    # build: zeek-ssh-node
+    image: fixel/zeek-cluster:zeek-ssh-node
     networks:
-      bro-cluster-overlay:
+      zeek-cluster-overlay:
         aliases:
           - worker1
   
   worker2:
-    # build: bro-ssh-node
-    image: fixel/bro-cluster:bro-ssh-node
+    # build: zeek-ssh-node
+    image: fixel/zeek-cluster:zeek-ssh-node
     networks:
-      bro-cluster-overlay:
+      zeek-cluster-overlay:
         aliases:
           - worker2
 
   proxy:
-    # build: bro-ssh-node
-    image: fixel/bro-cluster:bro-ssh-node
+    # build: zeek-ssh-node
+    image: fixel/zeek-cluster:zeek-ssh-node
     networks:
-      bro-cluster-overlay:
+      zeek-cluster-overlay:
         aliases:
           - proxy
 
   manager:
     # build: manager
-    image: fixel/bro-cluster:manager
+    image: fixel/zeek-cluster:manager
     depends_on:
       - worker1
       - worker2
       - proxy
     # volumes:
-    #  - "./path/to/your/scripts:/bro/share/bro/site"
+    #  - "./path/to/your/scripts:/zeek/share/bro/site"
     networks:
-      bro-cluster-overlay:
+      zeek-cluster-overlay:
         aliases:
           - manager
 

@@ -1,4 +1,4 @@
-FROM fixel/bro-cluster:arm64v8-bro-ssh-node
+FROM fixel/zeek-cluster:arm64v8-zeek-ssh-node
 
 COPY config/node.cfg /bro/etc/node.cfg
 COPY config/networks.cfg /bro/etc/networks.cfg

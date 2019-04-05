@@ -1,4 +1,4 @@
-FROM fixel/bro-cluster:arm64v8-base as install
+FROM fixel/zeek:arm64v8-latest as install
 
 # "production" image will hold supervisor -> bro and ssh
 FROM debian:stretch
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get -y install \
     libssl1.0.2 \
     net-tools \
     openssh-server \
-    python2.7-minimal \
+    python3 \
     rsync \
     supervisor \
     --no-install-recommends && \
@@ -21,13 +21,13 @@ RUN apt-get update && apt-get -y install \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=install /usr/local/bro /usr/local/bro
-RUN ln -s /usr/local/bro /bro
+RUN ln -s /usr/local/bro /zeek
 COPY --from=install /usr/share/GeoIP /usr/share/GeoIP/
 
-ENV PATH=/bro/bin:$PATH
+ENV PATH=/zeek/bin:$PATH
 ENV BROPATH=.:/usr/local/bro/share/bro:/usr/local/bro/share/bro/policy:/usr/local/bro/share/bro/site
 
-RUN echo bronode > /etc/hostname
+RUN echo zeeknode > /etc/hostname
 
 # ssh keys + config
 COPY ssh/id_rsa.pub /root/.ssh/authorized_keys2
